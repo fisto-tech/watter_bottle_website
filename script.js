@@ -2,6 +2,70 @@
 
 gsap.registerPlugin(ScrollTrigger);
 
+// ==========================================
+// Mobile Menu Toggle Logic
+// ==========================================
+const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+const mobileMenu = document.getElementById('mobile-menu');
+const hamburgerIcon = document.getElementById('hamburger-icon');
+const closeIcon = document.getElementById('close-icon');
+const mobileLinks = document.querySelectorAll('.mobile-link');
+
+if (mobileMenuBtn && mobileMenu) {
+    function toggleMobileMenu() {
+        const isHidden = mobileMenu.classList.contains('hidden');
+        if (isHidden) {
+            mobileMenu.classList.remove('hidden');
+            // small delay to allow display:block to apply before opacity transition
+            setTimeout(() => mobileMenu.classList.remove('opacity-0'), 10);
+            hamburgerIcon.classList.add('hidden');
+            closeIcon.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        } else {
+            mobileMenu.classList.add('opacity-0');
+            setTimeout(() => {
+                mobileMenu.classList.add('hidden');
+            }, 300); // match duration-300
+            hamburgerIcon.classList.remove('hidden');
+            closeIcon.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+    }
+
+    mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+
+    // Close menu when a link is clicked
+    mobileLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (!mobileMenu.classList.contains('hidden')) toggleMobileMenu();
+        });
+    });
+}
+
+// ==========================================
+// Lenis Smooth Scroll Initialization
+// ==========================================
+const lenis = new Lenis({
+  duration: 1.2,
+  easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
+  direction: 'vertical',
+  gestureDirection: 'vertical',
+  smooth: true,
+  mouseMultiplier: 1,
+  smoothTouch: false,
+  touchMultiplier: 2,
+  infinite: false,
+});
+
+// Synchronize Lenis scrolling with GSAP ScrollTrigger
+lenis.on('scroll', ScrollTrigger.update);
+
+gsap.ticker.add((time) => {
+  lenis.raf(time * 1000);
+});
+
+gsap.ticker.lagSmoothing(0);
+
 // Create a main timeline tied to ScrollTrigger to ensure all animations reverse together
 const tl = gsap.timeline({
     scrollTrigger: {
@@ -129,6 +193,30 @@ heroCanvas.ripples({
 
 // Initialize ripples on the Collection section independently
 $('#collection').ripples({
+    resolution: 1080,
+    perturbance: 0.01,
+    interactive: true
+});
+
+// Initialize ripples on the Gallery section (handle inverted mouse due to CSS scaleX(-1))
+$('#gallery-ripple').ripples({
+    resolution: 1080,
+    perturbance: 0.01,
+    interactive: false // Disable built-in to manually handle inverted X
+});
+$('#gallery').on('mousemove', function(e) {
+    const $el = $('#gallery-ripple');
+    let x = e.pageX - $el.offset().left;
+    let y = e.pageY - $el.offset().top;
+    
+    // Invert X because the element is scaled by -1 horizontally
+    x = $el.outerWidth() - x;
+
+    $el.ripples('drop', x, y, 20, 0.04);
+});
+
+// Initialize ripples on the Banner section
+$('#banner-ripple').ripples({
     resolution: 1080,
     perturbance: 0.01,
     interactive: true
@@ -294,82 +382,6 @@ if (nextBtn && prevBtn) {
 // Start auto slider on load
 scheduleNextStep();
 
-// ==========================================
-// Collection Card Stack Logic
-// ==========================================
-const cardStackContainer = document.getElementById('card-stack-container');
-let stackedCards = Array.from(document.querySelectorAll('.stacked-card'));
-
-function initCards() {
-    stackedCards.forEach((card, i) => {
-        gsap.set(card, {
-            y: -i * 45,
-            scale: 1 - (i * 0.05),
-            zIndex: stackedCards.length - i,
-            opacity: 1
-        });
-    });
-}
-
-if (stackedCards.length > 0) {
-    initCards();
-    
-    let cardInterval;
-
-    function nextCard() {
-        // Prevent spam clicking while animating
-        if (gsap.isTweening(stackedCards[0])) return; 
-        
-        // Pop the front card and move it to the back of the array
-        const frontCard = stackedCards.shift();
-        stackedCards.push(frontCard);
-        
-        // 1. Animate the front card flying up and fading out
-        gsap.to(frontCard, {
-            y: -300,
-            scale: 0.85,
-            opacity: 0,
-            duration: 0.35,
-            ease: "power2.in",
-            onComplete: () => {
-                // Snap it to its new back position invisibly, then fade it in
-                const newIndex = stackedCards.length - 1;
-                gsap.set(frontCard, { 
-                    y: -newIndex * 45, 
-                    scale: 1 - (newIndex * 0.05),
-                    zIndex: 1 
-                });
-                gsap.to(frontCard, { opacity: 1, duration: 0.3 });
-            }
-        });
-        
-        // 2. Animate the rest of the cards stepping forward
-        stackedCards.forEach((card, i) => {
-            if (i === stackedCards.length - 1) return; // Skip the card we just handled
-            
-            gsap.to(card, {
-                y: -i * 45,
-                scale: 1 - (i * 0.05),
-                zIndex: stackedCards.length - i,
-                duration: 0.5,
-                ease: "back.out(1.2)",
-                delay: 0.1 // Slight delay makes it feel like it waits for the front card to clear
-            });
-        });
-    }
-
-    function startCardInterval() {
-        cardInterval = setInterval(nextCard, 2500); // Automatically cycle every 2.5 seconds
-    }
-
-    cardStackContainer.addEventListener('click', () => {
-        clearInterval(cardInterval);
-        nextCard();
-        startCardInterval();
-    });
-
-    startCardInterval();
-}
 
 // ==========================================
 // Gallery Infinite Scroll Animation
@@ -391,3 +403,116 @@ gsap.to('.gallery-col-2', {
     duration: 40,  // Slightly different speed for variation
     repeat: -1
 });
+
+// ==========================================
+// Unique Text Animations for Each Section (with reverse)
+// ==========================================
+
+// 1. Collection Section: Slide in from the left
+const collectionText = document.querySelectorAll('#collection h2, #collection p, #collection a, #collection button');
+if (collectionText.length > 0) {
+    gsap.from(collectionText, {
+        scrollTrigger: {
+            trigger: '#collection',
+            start: "top 80%",
+            toggleActions: "play reverse play reverse",
+        },
+        x: -80,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.2,
+        ease: "power3.out",
+        clearProps: "all"
+    });
+}
+
+// 2. Banner Section: Dramatic scale and elastic bounce
+const bannerText = document.querySelectorAll('#banner h2, #banner p, #banner button');
+if (bannerText.length > 0) {
+    gsap.from(bannerText, {
+        scrollTrigger: {
+            trigger: '#banner',
+            start: "top 75%",
+            toggleActions: "play reverse play reverse",
+        },
+        scale: 0.5,
+        opacity: 0,
+        duration: 1.5,
+        stagger: 0.2,
+        ease: "elastic.out(1, 0.7)",
+        clearProps: "all"
+    });
+}
+
+// 3. Contact Us Section: Bouncy slide up
+const contactText = document.querySelectorAll('#contact h2, #contact span, #contact p, #contact button, #contact form');
+if (contactText.length > 0) {
+    gsap.from(contactText, {
+        scrollTrigger: {
+            trigger: '#contact',
+            start: "top 80%",
+            toggleActions: "play reverse play reverse",
+        },
+        y: 80,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.1,
+        ease: "back.out(1.5)",
+        clearProps: "all"
+    });
+}
+
+// 4. Footer Section: Smooth slow fade up
+const footerText = document.querySelectorAll('footer h2, footer p, footer span');
+if (footerText.length > 0) {
+    gsap.from(footerText, {
+        scrollTrigger: {
+            trigger: 'footer',
+            start: "top 95%",
+            toggleActions: "play reverse play reverse",
+        },
+        y: 30,
+        opacity: 0,
+        duration: 1.5,
+        stagger: 0.1,
+        ease: "power2.out",
+        clearProps: "all"
+    });
+}
+
+// ==========================================
+// Interactive Cards Hover Logic (Reference JS)
+// ==========================================
+const icCards = document.querySelectorAll("#interactive-cards .card");
+
+if (icCards.length > 0) {
+    icCards.forEach((card) => {
+        card.addEventListener("mouseenter", () => {
+            icCards.forEach((c) => {
+                if (c === card) c.classList.add("active");
+                else c.classList.add("not-active");
+            });
+        });
+
+        card.addEventListener("mouseleave", () => {
+            icCards.forEach((c) => {
+                c.classList.remove("active", "not-active");
+            });
+        });
+    });
+
+    gsap.from("#interactive-cards h2, #interactive-cards p, #interactive-cards .card", {
+        scrollTrigger: {
+            trigger: '#interactive-cards',
+            start: "top 75%",
+            toggleActions: "play reverse play reverse",
+        },
+        y: 50,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.1,
+        ease: "power3.out",
+        clearProps: "transform,opacity" // <--- CRITICAL FIX: clear inline styles so CSS hover transform works
+    });
+}
+

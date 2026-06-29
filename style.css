@@ -1,0 +1,167 @@
+/* ==========================================
+ * Interactive Cards — Reference CSS (scoped)
+ * ========================================== */
+
+/* Grid container — replaces the reference's body grid */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  place-content: center;
+  width: 100%;
+  max-width: 1400px;
+  overflow: visible;
+}
+
+/* CSS variables from reference */
+#interactive-cards {
+  --card-bg-odd:  #bfbfbf;
+  --card-bg-even: #f2f2f2;
+
+  --scale-level-1: 1.2;
+  --scale-level-2: 1;
+  --scale-level-3: 0.8;
+
+  --rotate-level-1: 0deg;
+  --rotate-level-2: 15deg;
+  --rotate-level-3: 30deg;
+
+  --position-x-level-1: 0;
+  --position-x-level-2: 2rem;
+  --position-x-level-3: 4rem;
+
+  --position-y-level-1: 0;
+  --position-y-level-2: 2rem;
+  --position-y-level-3: 10rem;
+
+  --active-scale: 1.35;
+  --active-position-y: -2rem;
+  --not-active-scale-offset: 0.15;
+}
+
+/* ---- Card (Transparent for Image Only) ---- */
+#interactive-cards .card {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s;
+  /* Removed padding, background, border-radius, and overflow:hidden */
+}
+
+/* Optional: if you still want a dim effect on non-active images, you can apply it directly to the card */
+#interactive-cards .card.not-active {
+  opacity: 0.5;
+  filter: brightness(0.6);
+}
+
+/* ---- Avatar / Product image ---- */
+#interactive-cards .avatar-img {
+  align-self: center;
+  width: 22vw;
+  object-fit: contain;
+}
+
+/* ============================================
+ * Fan Transform States (exact from reference)
+ * ============================================ */
+
+#interactive-cards .card:nth-child(3) {
+  transform: scale(var(--scale-level-1)) rotate(var(--rotate-level-1))
+             translateX(var(--position-x-level-1)) translateY(var(--position-y-level-1));
+  z-index: 10;
+}
+#interactive-cards .card:nth-child(3).active {
+  transform: scale(var(--active-scale)) rotate(0)
+             translateX(var(--position-x-level-1)) translateY(var(--active-position-y));
+  z-index: 20;
+}
+#interactive-cards .card:nth-child(3).not-active {
+  transform: scale(calc(var(--scale-level-1) - var(--not-active-scale-offset)))
+             rotate(var(--rotate-level-1))
+             translateX(var(--position-x-level-1)) translateY(var(--position-y-level-1));
+}
+
+#interactive-cards .card:nth-child(2) {
+  transform: scale(var(--scale-level-2)) rotate(calc(-1 * var(--rotate-level-2)))
+             translateX(var(--position-x-level-2)) translateY(var(--position-y-level-2));
+  z-index: 5;
+}
+#interactive-cards .card:nth-child(2).active {
+  transform: scale(var(--active-scale)) rotate(0)
+             translateX(var(--position-x-level-2)) translateY(var(--active-position-y));
+  z-index: 20;
+}
+#interactive-cards .card:nth-child(2).not-active {
+  transform: scale(calc(var(--scale-level-2) - var(--not-active-scale-offset)))
+             rotate(calc(-1 * var(--rotate-level-2)))
+             translateX(var(--position-x-level-2)) translateY(var(--position-y-level-2));
+}
+
+#interactive-cards .card:nth-child(4) {
+  transform: scale(var(--scale-level-2)) rotate(var(--rotate-level-2))
+             translateX(calc(-1 * var(--position-x-level-2))) translateY(var(--position-y-level-2));
+  z-index: 5;
+}
+#interactive-cards .card:nth-child(4).active {
+  transform: scale(var(--active-scale)) rotate(0)
+             translateX(var(--position-x-level-2)) translateY(var(--active-position-y));
+  z-index: 20;
+}
+#interactive-cards .card:nth-child(4).not-active {
+  transform: scale(calc(var(--scale-level-2) - var(--not-active-scale-offset)))
+             rotate(var(--rotate-level-2))
+             translateX(calc(-1 * var(--position-x-level-2))) translateY(var(--position-y-level-2));
+}
+
+#interactive-cards .card:nth-child(1) {
+  transform: scale(var(--scale-level-3)) rotate(calc(-1 * var(--rotate-level-3)))
+             translateX(var(--position-x-level-3)) translateY(var(--position-y-level-3));
+  z-index: 1;
+}
+#interactive-cards .card:nth-child(1).active {
+  transform: scale(var(--active-scale)) rotate(0)
+             translateX(var(--position-x-level-3)) translateY(var(--active-position-y));
+  z-index: 20;
+}
+#interactive-cards .card:nth-child(1).not-active {
+  transform: scale(calc(var(--scale-level-3) - var(--not-active-scale-offset)))
+             rotate(calc(-1 * var(--rotate-level-3)))
+             translateX(var(--position-x-level-3)) translateY(var(--position-y-level-3));
+}
+
+#interactive-cards .card:nth-child(5) {
+  transform: scale(var(--scale-level-3)) rotate(var(--rotate-level-3))
+             translateX(calc(-1 * var(--position-x-level-3))) translateY(var(--position-y-level-3));
+  z-index: 1;
+}
+#interactive-cards .card:nth-child(5).active {
+  transform: scale(var(--active-scale)) rotate(0)
+             translateX(calc(-1 * var(--position-x-level-3))) translateY(var(--active-position-y));
+  z-index: 20;
+}
+#interactive-cards .card:nth-child(5).not-active {
+  transform: scale(calc(var(--scale-level-3) - var(--not-active-scale-offset)))
+             rotate(var(--rotate-level-3))
+             translateX(calc(-1 * var(--position-x-level-3))) translateY(var(--position-y-level-3));
+}
+
+/* ============================================
+ * Responsive Adjustments for Interactive Cards
+ * ============================================ */
+@media (max-width: 768px) {
+  #interactive-cards {
+    --position-x-level-2: 1.5rem;
+    --position-x-level-3: 3rem;
+    --position-y-level-2: 1rem;
+    --position-y-level-3: 6rem;
+  }
+  
+  #interactive-cards .avatar-img {
+    width: 35vw;
+  }
+  
+  .cards-grid {
+    gap: 0;
+  }
+}

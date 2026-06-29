@@ -28,9 +28,13 @@
     <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- Lenis Smooth Scroll -->
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
     <!-- jQuery and Ripples -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.ripples/0.5.3/jquery.ripples.min.js"></script>
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="./style.css?v=2">
 </head>
 <body class="antialiased overflow-x-hidden bg-white">
     
@@ -73,17 +77,36 @@
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
             </button>
             <!-- Button -->
-            <a href="#" class="bg-fisto-green text-white px-7 py-2.5 rounded-full font-semibold text-sm hover:bg-opacity-90 transition-all shadow-md shrink-0">ORDER NOW</a>
+            <a href="#" class="hidden sm:block bg-fisto-green text-white px-7 py-2.5 rounded-full font-semibold text-sm hover:bg-opacity-90 transition-all shadow-md shrink-0">ORDER NOW</a>
+            
+            <!-- Mobile Menu Toggle -->
+            <button id="mobile-menu-btn" class="lg:hidden text-gray-800 hover:text-fisto-green transition-colors relative z-50">
+                <!-- Hamburger Icon -->
+                <svg id="hamburger-icon" class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                <!-- Close Icon (Hidden) -->
+                <svg id="close-icon" class="w-7 h-7 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
         </div>
     </nav>
 
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-white/98 backdrop-blur-xl z-40 hidden flex-col items-center justify-center space-y-8 text-xl font-bold text-gray-800 lg:hidden opacity-0 transition-opacity duration-300">
+        <a href="#" class="mobile-link hover:text-fisto-green transition-colors pb-1">HOME</a>
+        <a href="#" class="mobile-link hover:text-fisto-green transition-colors pb-1">PRODUCTS</a>
+        <a href="#" class="mobile-link hover:text-fisto-green transition-colors pb-1">OUR STORY</a>
+        <a href="#" class="mobile-link hover:text-fisto-green transition-colors pb-1">GALLERY</a>
+        <a href="#" class="mobile-link hover:text-fisto-green transition-colors pb-1">FEATURES</a>
+        <a href="#" class="mobile-link hover:text-fisto-green transition-colors pb-1">CONTACT</a>
+        <a href="#" class="mobile-link bg-fisto-green text-white px-8 py-3 rounded-full font-semibold text-sm shadow-md mt-4">ORDER NOW</a>
+    </div>
+
     <!-- Hero Section -->
-    <main class="relative w-full h-screen pt-20 lg:pt-24 pb-8 px-4 md:px-8 lg:px-12 flex items-center overflow-hidden z-10">
+    <main class="relative w-full min-h-screen md:h-screen pt-28 md:pt-24 pb-8 px-4 md:px-8 lg:px-12 flex flex-col md:flex-row items-center justify-center overflow-hidden z-10">
         
-        <div class="relative w-full h-full max-w-[1600px] mx-auto z-10">
+        <div class="relative w-full h-full max-w-[1600px] mx-auto z-10 flex flex-col md:block items-center justify-start flex-1">
             
             <!-- Left Glass Panel -->
-            <div class="absolute top-[55%] -translate-y-1/2 left-4 md:left-12 lg:left-20 w-full max-w-[95%] md:max-w-xl bg-[url('./assets/Images/Card_bg.png')] bg-cover bg-center rounded-l-[1rem] rounded-r-none p-6 md:p-10 lg:p-12 shadow-xl z-20">
+            <div class="relative md:absolute mt-4 md:mt-0 md:top-[55%] md:-translate-y-1/2 md:left-12 lg:left-20 w-full max-w-[95%] sm:max-w-[90%] md:max-w-xl bg-[url('./assets/Images/Card_bg.png')] bg-cover bg-center rounded-[1rem] md:rounded-l-[1rem] md:rounded-r-none p-6 md:p-10 lg:p-12 shadow-xl z-20 shrink-0">
                 
                 <h2 id="hero-title-1" class="text-3xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-[1.1] mb-2 tracking-tight">
                     CRAFTED FOR <br> GREAT FOOD.
@@ -131,8 +154,8 @@
             </div>
 
             <!-- Bottle Image -->
-            <div class="absolute bottom-0 left-[75%] md:left-[70%] lg:left-[750px] xl:left-[850px] transform -translate-x-1/2 h-[65%] md:h-[75%] lg:h-[85%] z-30 flex items-end drop-shadow-[0_25px_25px_rgba(0,0,0,0.4)] pointer-events-none">
-                <img id="hero-bottle" src="./assets/Bottle/Restaurant/bottle_1.webp" alt="FIST-O Bottle" class="h-full object-contain object-bottom origin-bottom">
+            <div class="relative md:absolute md:bottom-0 md:left-[70%] lg:left-[750px] xl:left-[850px] md:transform md:-translate-x-1/2 w-full md:w-auto flex-1 md:flex-none h-auto md:h-[75%] lg:h-[85%] min-h-[35vh] mt-6 md:mt-0 z-30 flex items-end justify-center md:justify-start drop-shadow-[0_25px_25px_rgba(0,0,0,0.4)] pointer-events-none">
+                <img id="hero-bottle" src="./assets/Bottle/Restaurant/bottle_1.webp" alt="FIST-O Bottle" class="h-[40vh] sm:h-[45vh] md:h-full object-contain object-bottom origin-bottom">
             </div>
 
             <!-- Right Side Elements -->
@@ -180,67 +203,96 @@
     </main>
 
     <!-- Collection Section -->
-    <section id="collection" class="relative w-full h-screen bg-white overflow-hidden py-12 lg:py-20 px-6 md:px-12 lg:px-20" style="background-image: url('./assets/Card_section/Water_bg.png'); background-repeat: no-repeat; background-position: bottom; background-size: 100% auto;">
+    <section id="collection" class="relative w-full min-h-screen lg:h-screen bg-white overflow-hidden py-12 lg:py-20 px-6 md:px-12 lg:px-20" style="background-image: url('./assets/Card_section/Water_bg_1.webp'); background-repeat: no-repeat; background-position: bottom; background-size: 100% auto;">
 
 
-        <div class="max-w-[1500px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10 h-full">
+        <div class="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-8 items-center relative z-10 h-full">
             
             <!-- Left Text Content -->
-            <div class="flex flex-col items-start self-center -translate-y-8 lg:-translate-y-16 pr-0 lg:pr-10">
-                <span class="text-fisto-green font-extrabold text-sm md:text-base tracking-[0.15em] mb-6">OUR COLLECTION</span>
+            <div class="flex flex-col items-center lg:items-start text-center lg:text-left self-center px-4 lg:px-0 lg:pl-10">
+                <span class="text-[#8CC256] font-extrabold text-sm md:text-base tracking-[0.15em] mb-6">OUR COLLECTION</span>
                 
-                <h2 class="text-4xl md:text-5xl lg:text-[64px] font-black text-black leading-[1.05] mb-10 tracking-tight">
+                <h2 class="text-4xl md:text-5xl lg:text-[56px] font-black text-white leading-[1.05] mb-8 tracking-tight">
                     Bottles For<br>Every Lifestyle
                 </h2>
                 
-                <p class="text-xl md:text-2xl font-bold text-gray-900 mb-6">
+                <p class="text-xl md:text-2xl font-bold text-gray-100 drop-shadow-md">
                     Stay Refreshed Wherever Life Takes You.
-                </p>
-                
-                <p class="text-gray-500 text-lg md:text-xl font-medium leading-[1.7] max-w-lg">
-                    From Fitness Sessions And Business Meetings To Restaurants, Travel, And Everyday Hydration, The FISTO Blue Bottle Delivers Pure Freshness With A Premium Design That Complements Every Lifestyle.
                 </p>
             </div>
 
-            <!-- Right Card Stack -->
-            <div class="relative w-full min-h-[500px] lg:min-h-[700px] flex items-center justify-center translate-y-10 lg:translate-y-20">
-                <div id="card-stack-container" class="relative w-[85%] max-w-[400px] aspect-[4/6] cursor-pointer group">
-                    <img src="./assets/Card_section/Card_1.png" class="stacked-card absolute inset-0 w-full h-full object-contain">
-                    <img src="./assets/Card_section/Card_2.png" class="stacked-card absolute inset-0 w-full h-full object-contain">
-                    <img src="./assets/Card_section/Card_3.png" class="stacked-card absolute inset-0 w-full h-full object-contain">
-                    <img src="./assets/Card_section/Card_4.png" class="stacked-card absolute inset-0 w-full h-full object-contain">
-                    <img src="./assets/Card_section/Card_5.png" class="stacked-card absolute inset-0 w-full h-full object-contain">
-                    <img src="./assets/Card_section/Card_6.png" class="stacked-card absolute inset-0 w-full h-full object-contain">
+            <!-- Center Single Image -->
+            <div class="relative w-full min-h-[450px] lg:min-h-[700px] flex items-center justify-center self-center">
+                <div class="relative w-[80%] max-w-[360px] aspect-[4/6]">
+                    <img src="./assets/Card_section/Card_1.png" class="w-full h-full object-contain drop-shadow-2xl">
                 </div>
+            </div>
+            
+            <!-- Right Text Content -->
+            <div class="flex flex-col items-center lg:items-start text-center lg:text-left self-center px-4 lg:px-0 lg:pr-10">
+                <p class="text-gray-300 text-lg md:text-xl font-medium leading-[1.7] max-w-sm drop-shadow-sm mb-8">
+                    From Fitness Sessions And Business Meetings To Restaurants, Travel, And Everyday Hydration, The FISTO Blue Bottle Delivers Pure Freshness With A Premium Design That Complements Every Lifestyle.
+                </p>
+                
+                <a href="#" class="bg-[#8CC256] text-[#092e1b] px-8 py-3 rounded-full font-bold text-sm hover:bg-white hover:text-[#092e1b] transition-all shadow-md shrink-0">
+                    EXPLORE MORE
+                </a>
             </div>
             
         </div>
     </section>
 
+    <!-- Interactive Cards Section (From Reference) -->
+    <section id="interactive-cards" class="w-full bg-[#092e1b] pt-28 pb-48 lg:pt-36 lg:pb-60 px-6 min-h-screen flex flex-col items-center justify-center relative">
+
+        <div class="text-center mb-16 lg:mb-24 w-full relative z-30">
+            <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 tracking-tight">Discover Your Fit</h2>
+            <p class="text-[#8CC256] text-lg lg:text-xl font-medium tracking-wide">Hover to explore our premium collection</p>
+        </div>
+
+        <div class="cards-grid">
+            <div class="card">
+              <img class="avatar-img" src="./assets/Card_section/Card_1.webp" alt="FISTO Restaurant" />
+            </div>
+            <div class="card">
+              <img class="avatar-img" src="./assets/Card_section/Card_2.webp" alt="FISTO Airlines" />
+            </div>
+            <div class="card">
+              <img class="avatar-img" src="./assets/Card_section/Card_3.webp" alt="FISTO Premium" />
+            </div>
+            <div class="card">
+              <img class="avatar-img" src="./assets/Card_section/Card_4.webp" alt="FISTO Travel" />
+            </div>
+            <div class="card">
+              <img class="avatar-img" src="./assets/Card_section/Card_5.webp" alt="FISTO Retail" />
+            </div>
+        </div>
+    </section>
+
     <!-- Custom JS (cache busted) -->
     <!-- Gallery Section -->
-    <section id="gallery" class="relative w-full h-screen bg-white pt-24 lg:pt-32 pb-16 px-6 md:px-12 lg:px-20 overflow-hidden">
+    <section id="gallery" class="relative w-full min-h-screen lg:h-screen bg-white pt-24 lg:pt-32 pb-16 px-6 md:px-12 lg:px-20 overflow-hidden">
         <!-- Background Image with White Overlay -->
-        <div class="absolute inset-0 w-full h-full z-0 pointer-events-none flex items-end">
-            <div class="w-full h-full bg-[url('./assets/Gallery/Gallery_bg.webp')] bg-no-repeat bg-cover bg-center opacity-85 transform -scale-x-100"></div>
+        <div class="absolute inset-0 w-full h-full z-0 flex items-end">
+            <div id="gallery-ripple" class="w-full h-full bg-[url('./assets/Gallery/Gallery_bg.webp')] bg-no-repeat bg-cover bg-center opacity-85 transform -scale-x-100"></div>
             <!-- White Overlay -->
-            <div class="absolute inset-0 w-full h-full bg-white/60"></div>
+            <div class="absolute inset-0 w-full h-full bg-white/60 pointer-events-none"></div>
         </div>
 
         <div class="max-w-[1500px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 relative z-10 items-center h-full">
             
             <!-- Left Side Text -->
             <div class="flex flex-col pb-12 lg:pb-0 relative z-20 -mt-8">
-                <span class="text-[#2B63A8] font-semibold tracking-widest text-sm mb-8 uppercase">GALLERY</span>
+                <span class="text-[#0c4a2a] font-bold tracking-widest text-sm mb-8 uppercase text-center lg:text-left">GALLERY</span>
                 
-                <div class="mb-10 space-y-4 relative z-50" style="opacity: 1 !important; visibility: visible !important; color: black !important;">
+                <div class="mb-10 space-y-4 relative z-50 text-center lg:text-left" style="opacity: 1 !important; visibility: visible !important; color: black !important;">
                     <h3 class="text-5xl md:text-6xl lg:text-[70px] font-medium leading-tight" style="color: black !important;">Pure</h3>
                     <h3 class="text-5xl md:text-6xl lg:text-[70px] font-medium leading-tight" style="color: black !important;">Moments.</h3>
                     <h3 class="text-5xl md:text-6xl lg:text-[70px] font-medium leading-tight" style="color: black !important;">Captured In</h3>
-                    <h3 class="text-5xl md:text-6xl lg:text-[70px] font-medium text-[#2B63A8] leading-tight" style="color: #2B63A8 !important;">Every Drop.</h3>
+                    <h3 class="text-5xl md:text-6xl lg:text-[70px] font-medium text-[#0c4a2a] leading-tight" style="color: #0c4a2a !important;">Every Drop.</h3>
                 </div>
 
-                <p class="text-gray-800 text-lg md:text-xl font-medium max-w-[480px] leading-[1.8] bg-white/40 backdrop-blur-[2px] rounded-2xl p-2 -ml-2">
+                <p class="text-gray-800 text-lg md:text-xl font-medium max-w-[480px] leading-[1.8] bg-white/40 backdrop-blur-[2px] rounded-2xl p-2 mx-auto lg:-ml-2 text-center lg:text-left">
                     From High Above The Clouds To Life's Everyday Moments, FISTO Is There - Bringing Purity, Freshness, And Trust To Every Experience.
                 </p>
             </div>
@@ -302,6 +354,138 @@
         </div>
     </section>
 
-    <script type="module" src="./script.js"></script>
+
+
+    <!-- Banner Section -->
+    <section id="banner" class="w-full py-12 lg:py-16 px-4 sm:px-6 md:px-12 lg:px-20 bg-[#EAF3EE]">
+        <div id="banner-ripple" class="relative z-0 w-full max-w-[1500px] mx-auto overflow-hidden rounded-[2rem] shadow-2xl bg-[url('./assets/Banner/Banner.webp')] bg-cover bg-center">
+            <!-- Background Image (Original Height) -->
+            <img src="./assets/Banner/Banner.webp" class="w-full h-auto block object-cover opacity-0 pointer-events-none" alt="FIST-O Water Bottles Banner">
+            
+            <!-- Content Overlay -->
+            <div class="absolute inset-0 z-10 w-full px-6 md:px-12 lg:px-16 flex flex-col justify-center">
+                <div class="max-w-[85%] sm:max-w-[75%] md:max-w-[600px] lg:max-w-[800px]">
+                    <h2 class="text-white text-2xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-[42px] font-bold leading-[1.1] mb-2 lg:mb-4 tracking-tight">
+                        More Than Just Water.
+                    </h2>
+                    <p class="text-white text-xs sm:text-xs md:text-sm xl:text-[15px] font-medium mb-4 lg:mb-6 leading-snug opacity-95">
+                        7 Stage Purified | Mineral Enriched | Leak Proof | Food Grade | Eco Friendly | BPA-Free&reg;
+                    </p>
+                    <button class="bg-white text-[#0c7fa0] font-bold text-xs md:text-sm tracking-widest px-4 md:px-6 py-2 md:py-2.5 rounded-md shadow-md hover:bg-gray-100 hover:scale-105 transition-all duration-300 uppercase">
+                        Shop Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Us Section -->
+    <section id="contact" class="w-full bg-[#F7F7F7] py-8 lg:py-10 px-6 md:px-12 lg:px-20 relative overflow-hidden">
+        <div class="max-w-[1500px] mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-8 items-center relative z-10">
+            
+            <!-- Left: Contact Info -->
+            <div class="flex flex-col">
+                <span class="text-[#0c4a2a] font-bold text-sm tracking-widest uppercase mb-4">GET IN TOUCH</span>
+                <h2 class="text-4xl md:text-5xl lg:text-[52px] font-bold text-[#111] leading-tight mb-10">
+                    We'd Love to<br>Hear from You
+                </h2>
+                
+                <div class="space-y-6 mb-12">
+                    <!-- Phone -->
+                    <div class="flex items-center space-x-5">
+                        <div class="w-12 h-12 bg-[#0c4a2a] rounded-full flex items-center justify-center text-white shrink-0">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20 15.5c-1.2 0-2.4-.2-3.6-.6-.3-.1-.7 0-1 .2l-2.2 2.2c-2.8-1.4-5.1-3.8-6.6-6.6l2.2-2.2c.3-.3.4-.7.2-1-.4-1.1-.6-2.3-.6-3.5 0-.6-.4-1-1-1H4c-.6 0-1 .4-1 1 0 9.4 7.6 17 17 17 .6 0 1-.4 1-1v-3.5c0-.6-.4-1-1-1zM19 12h2a9 9 0 0 0-9-9v2c3.9 0 7.1 3.2 7.1 7.1zM15 12h2c0-2.8-2.2-5-5-5v2c1.7 0 3 1.3 3 3z"></path></svg>
+                        </div>
+                        <span class="text-gray-800 font-medium text-lg">+91 98765 43210</span>
+                    </div>
+                    <!-- Email -->
+                    <div class="flex items-center space-x-5">
+                        <div class="w-12 h-12 bg-[#0c4a2a] rounded-full flex items-center justify-center text-white shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        </div>
+                        <span class="text-gray-800 font-medium text-lg">hello@fisto01.com</span>
+                    </div>
+                    <!-- Address -->
+                    <div class="flex items-start space-x-5">
+                        <div class="w-12 h-12 bg-[#0c4a2a] rounded-full flex items-center justify-center text-white shrink-0 mt-1">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5c-1.4 0-2.5-1.1-2.5-2.5S10.6 6.5 12 6.5s2.5 1.1 2.5 2.5S13.4 11.5 12 11.5z"></path></svg>
+                        </div>
+                        <span class="text-gray-800 font-medium text-lg leading-relaxed">
+                            123, Pure Water Road,<br>Green City, India - 560001
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Social Icons -->
+                <div class="flex space-x-3">
+                    <a href="#" class="w-10 h-10 bg-[#0c4a2a] rounded-full flex items-center justify-center text-white hover:bg-[#07311b] transition-colors"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.64.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92-.06-1.27-.07-1.64-.07-4.85s.01-3.58.07-4.85c.15-3.23 1.66-4.77 4.92-4.92 1.27-.06 1.65-.07 4.85-.07M12 0C8.74 0 8.33.01 7.05.07c-4.27.2-6.78 2.71-6.98 6.98C0 8.33 0 8.74 0 12s.01 3.67.07 4.95c.2 4.27 2.71 6.78 6.98 6.98C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c4.27-.2 6.78-2.71 6.98-6.98C23.99 15.67 24 15.26 24 12s-.01-3.67-.07-4.95c-.2-4.27-2.71-6.78-6.98-6.98C15.67.01 15.26 0 12 0zm0 5.84a6.16 6.16 0 1 0 0 12.32 6.16 6.16 0 0 0 0-12.32zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm5.96-10.44a1.44 1.44 0 1 0 0-2.88 1.44 1.44 0 0 0 0 2.88z"></path></svg></a>
+                    <a href="#" class="w-10 h-10 bg-[#0c4a2a] rounded-full flex items-center justify-center text-white hover:bg-[#07311b] transition-colors"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22.67 0H1.33C.6 0 0 .6 0 1.33v21.34C0 23.4.6 24 1.33 24h11.49V14.7h-3.13v-3.62h3.13V8.41c0-3.1 1.89-4.79 4.66-4.79 1.33 0 2.47.1 2.8.14v3.24h-1.92c-1.5 0-1.8.72-1.8 1.77v2.32h3.6l-.47 3.62h-3.13V24h6.12c.73 0 1.33-.6 1.33-1.33V1.33C24 .6 23.4 0 22.67 0z"></path></svg></a>
+                    <a href="#" class="w-10 h-10 bg-[#0c4a2a] rounded-full flex items-center justify-center text-white hover:bg-[#07311b] transition-colors"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.95.55 3.77 1.5 5.3L2 22l4.82-1.42C8.25 21.54 10.07 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm5.8 13.91c-.24.67-1.4 1.28-1.93 1.32-.48.04-1.07.2-3.17-.67-2.52-1.05-4.14-3.66-4.26-3.83-.12-.16-1.02-1.35-1.02-2.57 0-1.22.63-1.82.85-2.07.23-.25.5-.32.67-.32.16 0 .32.01.46.02.16.01.38-.06.58.41.21.5.73 1.78.8 1.93.06.16.11.34.01.54-.1.19-.15.31-.3.48-.15.17-.32.36-.45.49-.15.16-.32.33-.14.64.18.31.81 1.35 1.75 2.19 1.21 1.08 2.22 1.41 2.53 1.56.31.15.49.12.67-.08.18-.21.78-.91.99-1.22.21-.31.42-.26.7-.16.29.11 1.83.87 2.15 1.02.31.16.53.24.6.38.08.14.08.82-.16 1.49z"></path></svg></a>
+                    <a href="#" class="w-10 h-10 bg-[#0c4a2a] rounded-full flex items-center justify-center text-white hover:bg-[#07311b] transition-colors"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.5 6.1c-.28-1.05-1.12-1.89-2.17-2.17C19.4 3.5 12 3.5 12 3.5s-7.4 0-9.33.43c-1.05.28-1.89 1.12-2.17 2.17C.07 8.03.07 12 .07 12s0 3.97.43 5.9c.28 1.05 1.12 1.89 2.17 2.17 1.93.43 9.33.43 9.33.43s7.4 0 9.33-.43c1.05-.28 1.89-1.12 2.17-2.17.43-1.93.43-5.9.43-5.9s0-3.97-.43-5.9zM9.54 15.54V8.46L15.82 12l-6.28 3.54z"></path></svg></a>
+                </div>
+            </div>
+
+            <!-- Middle: Bottle Image -->
+            <div class="relative w-full h-[300px] md:h-[500px] lg:h-[650px] flex justify-center items-center">
+                <img src="./assets/Contact_us/Contact_bottle.webp" alt="Water Bottle Splash" class="object-contain w-full h-full transform scale-110 md:scale-125 lg:scale-150">
+            </div>
+
+            <!-- Right: Contact Form -->
+            <div class="w-full">
+                <form class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <input type="text" placeholder="Your Name" class="w-full bg-transparent border border-gray-300 rounded-lg p-4 text-gray-700 placeholder-gray-500 focus:border-[#0c4a2a] focus:outline-none transition-colors">
+                        <input type="email" placeholder="Email Address" class="w-full bg-transparent border border-gray-300 rounded-lg p-4 text-gray-700 placeholder-gray-500 focus:border-[#0c4a2a] focus:outline-none transition-colors">
+                    </div>
+                    <input type="tel" placeholder="Phone Number" class="w-full bg-transparent border border-gray-300 rounded-lg p-4 text-gray-700 placeholder-gray-500 focus:border-[#0c4a2a] focus:outline-none transition-colors">
+                    <textarea placeholder="Your Message" rows="5" class="w-full bg-transparent border border-gray-300 rounded-lg p-4 text-gray-700 placeholder-gray-500 focus:border-[#0c4a2a] focus:outline-none transition-colors resize-none"></textarea>
+                    
+                    <button type="button" class="w-full bg-[#0c4a2a] text-white font-bold tracking-wider py-4 rounded-lg mt-2 hover:bg-[#07311b] hover:shadow-lg transition-all duration-300 uppercase">
+                        SEND MESSAGE
+                    </button>
+                </form>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="w-full bg-[#092e1b] pt-16 pb-6 px-6 md:px-12 lg:px-20 border-t border-[#092e1b]">
+        <div class="max-w-[1500px] mx-auto">
+            <!-- Top Footer -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16 items-center">
+                <!-- Logo -->
+                <div class="flex flex-col items-start md:items-start">
+                    <h2 class="text-[#e1c575] text-5xl lg:text-[56px] font-black tracking-tight mb-2">FIST-O</h2>
+                    <div class="flex items-center space-x-2">
+                        <div class="h-px w-8 bg-[#e1c575]"></div>
+                        <span class="text-[#e1c575] text-xs font-semibold tracking-[0.2em] uppercase">TECH PVT. LTD.</span>
+                        <div class="h-px w-8 bg-[#e1c575]"></div>
+                    </div>
+                </div>
+
+                <!-- Text block -->
+                <div class="flex flex-col text-center md:text-left">
+                    <p class="text-white font-semibold text-lg lg:text-xl mb-1">Pure. Powerful. Purified.</p>
+                    <p class="text-gray-300 text-sm lg:text-base leading-relaxed opacity-90">Premium packaged drinking water<br>for a healthier you.</p>
+                </div>
+
+                <!-- Social Icons -->
+                <div class="flex space-x-4 justify-start md:justify-end">
+                    <a href="#" class="w-10 h-10 border border-white rounded-full flex items-center justify-center text-white hover:bg-white hover:text-[#092e1b] transition-all"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.64.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92-.06-1.27-.07-1.64-.07-4.85s.01-3.58.07-4.85c.15-3.23 1.66-4.77 4.92-4.92 1.27-.06 1.65-.07 4.85-.07M12 0C8.74 0 8.33.01 7.05.07c-4.27.2-6.78 2.71-6.98 6.98C0 8.33 0 8.74 0 12s.01 3.67.07 4.95c.2 4.27 2.71 6.78 6.98 6.98C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c4.27-.2 6.78-2.71 6.98-6.98C23.99 15.67 24 15.26 24 12s-.01-3.67-.07-4.95c-.2-4.27-2.71-6.78-6.98-6.98C15.67.01 15.26 0 12 0zm0 5.84a6.16 6.16 0 1 0 0 12.32 6.16 6.16 0 0 0 0-12.32zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm5.96-10.44a1.44 1.44 0 1 0 0-2.88 1.44 1.44 0 0 0 0 2.88z"></path></svg></a>
+                    <a href="#" class="w-10 h-10 border border-white rounded-full flex items-center justify-center text-white hover:bg-white hover:text-[#092e1b] transition-all"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M22.67 0H1.33C.6 0 0 .6 0 1.33v21.34C0 23.4.6 24 1.33 24h11.49V14.7h-3.13v-3.62h3.13V8.41c0-3.1 1.89-4.79 4.66-4.79 1.33 0 2.47.1 2.8.14v3.24h-1.92c-1.5 0-1.8.72-1.8 1.77v2.32h3.6l-.47 3.62h-3.13V24h6.12c.73 0 1.33-.6 1.33-1.33V1.33C24 .6 23.4 0 22.67 0z"></path></svg></a>
+                    <a href="#" class="w-10 h-10 border border-white rounded-full flex items-center justify-center text-white hover:bg-white hover:text-[#092e1b] transition-all"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.95.55 3.77 1.5 5.3L2 22l4.82-1.42C8.25 21.54 10.07 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm5.8 13.91c-.24.67-1.4 1.28-1.93 1.32-.48.04-1.07.2-3.17-.67-2.52-1.05-4.14-3.66-4.26-3.83-.12-.16-1.02-1.35-1.02-2.57 0-1.22.63-1.82.85-2.07.23-.25.5-.32.67-.32.16 0 .32.01.46.02.16.01.38-.06.58.41.21.5.73 1.78.8 1.93.06.16.11.34.01.54-.1.19-.15.31-.3.48-.15.17-.32.36-.45.49-.15.16-.32.33-.14.64.18.31.81 1.35 1.75 2.19 1.21 1.08 2.22 1.41 2.53 1.56.31.15.49.12.67-.08.18-.21.78-.91.99-1.22.21-.31.42-.26.7-.16.29.11 1.83.87 2.15 1.02.31.16.53.24.6.38.08.14.08.82-.16 1.49z"></path></svg></a>
+                    <a href="#" class="w-10 h-10 border border-white rounded-full flex items-center justify-center text-white hover:bg-white hover:text-[#092e1b] transition-all"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M23.5 6.1c-.28-1.05-1.12-1.89-2.17-2.17C19.4 3.5 12 3.5 12 3.5s-7.4 0-9.33.43c-1.05.28-1.89 1.12-2.17 2.17C.07 8.03.07 12 .07 12s0 3.97.43 5.9c.28 1.05 1.12 1.89 2.17 2.17 1.93.43 9.33.43 9.33.43s7.4 0 9.33-.43c1.05-.28 1.89-1.12 2.17-2.17.43-1.93.43-5.9.43-5.9s0-3.97-.43-5.9zM9.54 15.54V8.46L15.82 12l-6.28 3.54z"></path></svg></a>
+                </div>
+            </div>
+
+            <!-- Bottom Footer -->
+            <div class="border-t border-[rgba(255,255,255,0.1)] pt-6">
+                <p class="text-center text-gray-400 text-sm">&copy; 2026 FIST-O TECH PVT. LTD. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="./script.js?v=2"></script>
 </body>
 </html>
