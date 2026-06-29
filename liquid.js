@@ -253,7 +253,7 @@ void main(){
 
     seedDroplets() {
         for (let i = 0; i < 15; i++) {
-            this.spawn((Math.random() - 0.5) * 0.7, (Math.random() - 0.5) * 0.5, 0.03 + Math.random() * 0.05);
+            this.spawn((Math.random() - 0.5) * 0.7, (Math.random() - 0.5) * 0.5, 0.015 + Math.random() * 0.025);
         }
     }
 
@@ -364,7 +364,7 @@ void main(){
     }
 
     splitDroplets() {
-        const SPLIT_SPEED = 0.013, SPLIT_MIN_R = 0.04;
+        const SPLIT_SPEED = 0.013, SPLIT_MIN_R = 0.02;
         const add = [];
         for (const d of this.drops) {
             if (d.r < SPLIT_MIN_R) continue;
@@ -394,7 +394,7 @@ void main(){
         this.autoTimer += this.FIXED_DT_MS;
         if (this.autoTimer > 2000 && this.drops.length < 15) {
             this.autoTimer = 0;
-            this.spawn((Math.random() - 0.5) * this.aspect * 0.6, (Math.random() - 0.5) * 0.6, 0.025 + Math.random() * 0.03);
+            this.spawn((Math.random() - 0.5) * this.aspect * 0.6, (Math.random() - 0.5) * 0.6, 0.012 + Math.random() * 0.015);
         }
     }
 
@@ -403,7 +403,7 @@ void main(){
         this.spawnCD -= this.FIXED_DT_MS;
         if (this.spawnCD <= 0 && this.drops.length < this.MAX_DROPLETS) {
             this.spawnCD = 120;
-            this.spawn(this.mouse.x + (Math.random() - 0.5) * 0.02, this.mouse.y + (Math.random() - 0.5) * 0.02, 0.02 + Math.random() * 0.015);
+            this.spawn(this.mouse.x + (Math.random() - 0.5) * 0.02, this.mouse.y + (Math.random() - 0.5) * 0.02, 0.01 + Math.random() * 0.01);
         }
     }
 

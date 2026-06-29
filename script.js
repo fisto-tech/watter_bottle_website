@@ -1,4 +1,4 @@
-import { LiquidBackground } from './liquid.js';
+// Removed liquid.js import
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -7,7 +7,7 @@ const tl = gsap.timeline({
     scrollTrigger: {
         trigger: "main",
         start: "top 90%",
-        toggleActions: "play reverse play reverse",
+        toggleActions: "play none none none", // Do not reverse when scrolling down
     }
 });
 
@@ -114,9 +114,25 @@ let currentBottleIndex = 0;
 let slideTimeout;
 let isAnimating = false; // Prevent spam clicking
 
-// Initialize Liquid WebGL Background
-const bgUrls = slidesData.map(s => s.bgUrl);
-const liquidBg = new LiquidBackground('hero-canvas-container', bgUrls);
+// Initialize jQuery Ripples Background on the main element so it captures all hover events
+const heroCanvas = $('main');
+heroCanvas.css({
+    'background-image': `url(${slidesData[0].bgUrl})`,
+    'background-size': 'cover',
+    'background-position': 'center'
+});
+heroCanvas.ripples({
+    resolution: 1080,
+    perturbance: 0.01,
+    interactive: true
+});
+
+// Initialize ripples on the Collection section independently
+$('#collection').ripples({
+    resolution: 1080,
+    perturbance: 0.01,
+    interactive: true
+});
 
 function scheduleNextStep() {
     clearTimeout(slideTimeout);
@@ -141,30 +157,33 @@ function nextStep() {
 }
 
 function changeBottle(newSrc) {
-    // Creative animate out: scale down, rotate, and fade
+    // Create a clone of the current bottle for crossfading
+    const clone = bottleImg.cloneNode(true);
+    clone.removeAttribute('id'); // Avoid duplicate IDs
+    clone.classList.add('absolute', 'top-0', 'left-0', 'w-full', 'h-full', 'z-10');
+    
+    // Append clone to overlay the original
+    bottleImg.parentNode.appendChild(clone);
+    
+    // Update the original image to the new source and hide it initially
+    bottleImg.src = newSrc;
+    gsap.set(bottleImg, { opacity: 0 });
+    
+    // Fade in the new image
     gsap.to(bottleImg, {
+        opacity: 1,
+        duration: 0.6,
+        ease: "power2.inOut"
+    });
+    
+    // Fade out the old image (clone)
+    gsap.to(clone, {
         opacity: 0,
-        scale: 0.8,
-        rotation: 15,
-        y: 40,
-        duration: 0.4,
-        ease: "power2.in",
+        duration: 0.6,
+        ease: "power2.inOut",
         onComplete: () => {
-            bottleImg.src = newSrc;
-            
-            // Setup start state for new bottle
-            gsap.set(bottleImg, { rotation: -15, y: -40, scale: 1.1 });
-            
-            // Creative animate in: pop into place with an elastic bounce
-            gsap.to(bottleImg, { 
-                opacity: 1, 
-                scale: 1, 
-                rotation: 0,
-                y: 0, 
-                duration: 0.8,
-                ease: "elastic.out(1, 0.6)",
-                onComplete: scheduleNextStep 
-            });
+            clone.remove(); // Clean up clone
+            scheduleNextStep();
         }
     });
 }
@@ -179,10 +198,21 @@ function updateSlider(index) {
     currentIndex = index;
     currentBottleIndex = 0;
 
-    // Crossfade liquid background
-    if (liquidBg) {
-        liquidBg.crossfadeTo(index);
-    }
+    // Crossfade ripples background on hero
+    const newOverlay = $('<div class="absolute inset-0 w-full h-full bg-cover bg-center z-[0]" style="opacity:0;"></div>');
+    newOverlay.css('background-image', `url(${nextSlide.bgUrl})`);
+    heroCanvas.append(newOverlay);
+    
+    newOverlay.animate({opacity: 1}, 400, function() {
+        heroCanvas.ripples('destroy');
+        heroCanvas.css('background-image', `url(${nextSlide.bgUrl})`);
+        heroCanvas.ripples({
+            resolution: 1080,
+            perturbance: 0.01,
+            interactive: true
+        });
+        newOverlay.remove();
+    });
 
     // Fade out text with a slight slide
     gsap.to([title1, title2, desc], {
@@ -340,3 +370,24 @@ if (stackedCards.length > 0) {
 
     startCardInterval();
 }
+
+// ==========================================
+// Gallery Infinite Scroll Animation
+// ==========================================
+// Column 1 moves UP continuously
+gsap.to('.gallery-col-1', {
+    yPercent: -50, // Moves up by exactly 50% (one full set of the duplicated images)
+    ease: 'none',
+    duration: 35,  // Slow, smooth continuous movement
+    repeat: -1     // Infinite loop
+});
+
+// Column 2 moves DOWN continuously
+// First, offset it to start at -50% so it can move down to 0
+gsap.set('.gallery-col-2', { yPercent: -50 });
+gsap.to('.gallery-col-2', {
+    yPercent: 0,
+    ease: 'none',
+    duration: 40,  // Slightly different speed for variation
+    repeat: -1
+});

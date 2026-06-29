@@ -1,0 +1,19 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  overflow-x: hidden;
+}
+section {
+  width: 100vw;
+  height: 100vh;
+  float: left;
+  background-size: cover;
+  &.automattic {
+    background-image: url(https://images.unsplash.com/photo-1494007485290-ce668e189d92?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80);
+  }
+  &.hover {
+    background-image: url(https://images.unsplash.com/photo-1496196614460-48988a57fccf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1267&q=80);
+  }
+}
