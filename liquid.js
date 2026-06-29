@@ -1,4 +1,4 @@
-import * as THREE from "https://unpkg.com/three@0.160.1/build/three.module.js";
+import * as THREE from "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.1/three.module.min.js";
 
 /* ================================================================
    Liquid Glass - Modified for FISTO Water Bottles
